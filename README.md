@@ -1,188 +1,158 @@
-# Jarvis-desktop-assistant
-J.A.R.V.I.S v2.0 – Desktop AI Assistant
+# J.A.R.V.I.S v2.0 — Desktop AI Assistant
 
-A futuristic Python-based desktop voice assistant inspired by Iron Man’s JARVIS.
-
-This project is developed using Python and PyQt5 with voice recognition, text-to-speech, system monitoring, clipboard control, offline AI support using Ollama, GUI interaction, and automation features.
+> **Just A Rather Very Intelligent System**  
+> Voice-first desktop assistant with automatic text-input fallback.
 
 ---
 
-🚀 Features
+## What's New in This Build
 
-🎤 Voice Assistant
-
-- Voice command recognition
-- Text-to-speech response system
-- Smart fallback to text input if voice fails
-
-🖥️ System Monitoring
-
-- Battery percentage
-- RAM usage
-- CPU usage
-- Disk storage information
-
-🌐 Web Automation
-
-- Open YouTube
-- Open Google
-- Open Facebook
-- Open WhatsApp Web
-
-📋 Clipboard Functions
-
-- Copy text to clipboard
-- Read clipboard content
-- Paste clipboard automatically
-
-⌨️ Smart Typing Assistant
-
-- Automatically type text into any application
-- Uses clipboard + keyboard automation
-
-📰 Live News Headlines
-
-- Fetches BBC news headlines using RSS feed
-
-🤖 Offline AI Integration
-
-- Optional Ollama AI support
-- Works with local LLM models like:
-  - llama3
-  - mistral
-  - phi3
-
-📄 Chat History Logging
-
-- Automatically saves conversation history
-- Stores logs locally
-
-🎹 Global Hotkey
-
-- Activate assistant using:
-  Ctrl + Shift + J
-
-🎨 Futuristic GUI
-
-- Modern sci-fi inspired interface
-- Dark cyberpunk theme
-- Real-time chat display
+| Feature | Details |
+|---|---|
+| ⌨ Text-input fallback | If voice fails, Jarvis asks you to type instead |
+| 🎙 Voice input (default) | Microphone via Google Speech Recognition |
+| 🤖 Offline AI brain | Optional Ollama integration (llama3 / mistral / phi3) |
+| 📋 Clipboard control | Copy, read, and paste via voice or text |
+| 💻 System info | Battery, RAM, CPU, Disk usage |
+| 📰 Live news | BBC RSS headlines, no API key needed |
+| ⌨ Global hotkey | Ctrl + Shift + J activates Jarvis from anywhere |
+| 📄 Chat log | Every exchange saved to `~/jarvis_chat_log.txt` |
 
 ---
 
-🛠️ Technologies Used
+## Installation
 
-- Python
-- PyQt5
-- SpeechRecognition
-- pyttsx3
-- PyAutoGUI
-- psutil
-- pyperclip
-- feedparser
-- keyboard
-- Ollama
+### 1. Clone or download this folder
 
----
+```bash
+git clone <your-repo-url>
+cd jarvis
+```
 
-📦 Installation
+### 2. Install dependencies
 
-1️⃣ Clone Repository
+```bash
+pip install -r requirements.txt
+```
 
-git clone https://github.com/your-username/jarvis-assistant.git
-cd jarvis-assistant
+#### PyAudio (microphone support) — platform notes
 
-2️⃣ Install Dependencies
+| Platform | Command |
+|---|---|
+| **Windows** | `pip install pipwin` then `pipwin install pyaudio` |
+| **macOS** | `brew install portaudio` then `pip install pyaudio` |
+| **Linux** | `sudo apt install python3-pyaudio` or `pip install pyaudio` |
 
-pip install PyQt5 SpeechRecognition pyttsx3 pyaudio psutil pyperclip pyautogui feedparser keyboard ollama
+### 3. (Optional) Set up Ollama for offline AI
 
----
-
-⚠️ PyAudio Installation (Windows)
-
-If PyAudio fails:
-
-pip install pipwin
-pipwin install pyaudio
+1. Download from [https://ollama.com](https://ollama.com)
+2. Run: `ollama pull llama3`
+3. Jarvis will automatically detect and use it for unknown commands.
 
 ---
 
-🤖 Ollama Setup (Optional)
+## Running Jarvis
 
-Install Ollama:
-
-https://ollama.com
-
-Pull AI model:
-
-ollama pull llama3
-
-Run Ollama before starting Jarvis.
-
----
-
-▶️ Run Project
-
+```bash
 python jarvis_assistant_v2.py
+```
+
+> **Linux hotkey note:** The `keyboard` package requires elevated permissions.  
+> Run with `sudo python jarvis_assistant_v2.py` if Ctrl+Shift+J does not work.
 
 ---
 
-🧠 Example Commands
+## How Voice + Text Fallback Works
 
-- "Open YouTube"
-- "Open Google"
-- "Tell me the time"
-- "Battery status"
-- "RAM usage"
-- "CPU usage"
-- "Tell me a joke"
-- "Copy hello world"
-- "Read clipboard"
-- "Paste"
-- "Type good morning"
-- "News headlines"
-- "Exit"
+```
+Press START  →  Jarvis speaks "How may I assist you?"
+                        │
+                        ▼
+              🎙  Microphone listens (5 s timeout)
+                        │
+            ┌───────────┴───────────┐
+         Success                 Failure
+      (voice heard)        (timeout / mic error /
+            │               unrecognised speech)
+            │                       │
+            │               ⌨  Terminal shows:
+            │               "Type your command: "
+            │                       │
+            └──────────┬────────────┘
+                       ▼
+              execute_command(cmd)
+              (same logic for both)
+```
 
----
-
-📸 Screenshots
-
-Add your screenshots here.
-
-Example:
-
-![Main GUI](screenshots/main.png)
-
----
-
-📂 Project Structure
-
-jarvis-assistant/
-│
-├── jarvis_assistant_v2.py
-├── README.md
-├── screenshots/
-└── requirements.txt
+- Voice input is always attempted **first**.
+- Text fallback triggers **only** when voice returns an empty string.
+- Both paths feed into the **exact same** `execute_command()` function.
+- No code is duplicated.
 
 ---
 
-🎯 Future Improvements
+## Voice / Text Commands
 
-- Weather API integration
-- Face recognition
-- ChatGPT API support
-- Mobile control
-- Wake-word activation
-- Multi-language support
+| Command | What it does |
+|---|---|
+| `time` | Current time |
+| `date` | Today's date |
+| `youtube` | Opens YouTube |
+| `google` | Opens Google |
+| `facebook` | Opens Facebook |
+| `whatsapp` | Opens WhatsApp Web |
+| `notepad` | Opens text editor |
+| `calculator` | Opens calculator |
+| `battery` | Battery level & status |
+| `ram` / `memory` | RAM usage |
+| `cpu` / `processor` | CPU usage |
+| `disk` / `storage` | Disk usage |
+| `news` / `headline` | Top 5 BBC headlines |
+| `joke` | Random programming joke |
+| `copy <text>` | Copies text to clipboard |
+| `clipboard` | Reads clipboard content |
+| `paste` | Pastes clipboard (Ctrl+V) |
+| `type <text>` | Types text via automation |
+| `open log` / `history` | Opens chat log file |
+| `exit` / `quit` / `bye` | Closes Jarvis |
+
+Any unrecognised command is sent to **Ollama** if installed, otherwise Jarvis prompts you with supported commands.
 
 ---
 
-👨‍💻 Developer
+## File Structure
 
-Developed as a Final Year Python GUI Project.
+```
+jarvis/
+├── jarvis_assistant_v2.py   # Main application
+├── requirements.txt          # Python dependencies
+└── README.md                 # This file
+
+~/jarvis_chat_log.txt         # Auto-created chat history (home directory)
+```
 
 ---
 
-📜 License
+## Troubleshooting
 
-This project is for educational and learning purposes.
+| Problem | Fix |
+|---|---|
+| `PyAudio` install fails | See platform-specific instructions above |
+| Hotkey not working on Linux | Run with `sudo` |
+| `ollama` module not found | Run `pip install ollama` (optional) |
+| Speech recognition offline | Check internet connection (Google STT needs it) |
+| Text input prompt not visible | The prompt appears in the **terminal window**, not the GUI |
+
+---
+
+## Requirements
+
+- Python **3.8+**
+- Internet connection for speech recognition and news headlines
+- Microphone (optional — text fallback works without one)
+
+---
+
+## License
+
+MIT — free to use, modify, and distribute.
