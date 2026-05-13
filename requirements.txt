@@ -1,0 +1,35 @@
+# ─────────────────────────────────────────────────────────────────────────────
+#  J.A.R.V.I.S  v2.0  –  Python Dependencies
+#  Install with:  pip install -r requirements.txt
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── GUI ───────────────────────────────────────────────────────────────────────
+PyQt5>=5.15.0
+
+# ── Speech Recognition & Text-to-Speech ──────────────────────────────────────
+SpeechRecognition>=3.10.0
+pyttsx3>=2.90
+
+# ── Microphone access (PyAudio backend for SpeechRecognition) ─────────────────
+# Windows  →  pip install pipwin && pipwin install pyaudio
+# macOS    →  brew install portaudio && pip install pyaudio
+# Linux    →  sudo apt install python3-pyaudio  OR  pip install pyaudio
+pyaudio>=0.2.13
+
+# ── System info ───────────────────────────────────────────────────────────────
+psutil>=5.9.0
+
+# ── Clipboard & desktop automation ───────────────────────────────────────────
+pyperclip>=1.8.0
+pyautogui>=0.9.54
+
+# ── RSS news feed ─────────────────────────────────────────────────────────────
+feedparser>=6.0.0
+
+# ── Global hotkey  (optional – Ctrl+Shift+J) ─────────────────────────────────
+# Linux may require:  sudo pip install keyboard  OR run the app with sudo
+keyboard>=0.13.5
+
+# ── Offline AI brain via Ollama  (optional) ───────────────────────────────────
+# Requires Ollama server: https://ollama.com  →  ollama pull llama3
+ollama>=0.1.0
